@@ -14,7 +14,6 @@ function App() {
     } else {
       setSearchedChampion('');
     }
-    setMiddlePanel('search');
   };
 
   return (
@@ -30,6 +29,7 @@ function App() {
             type="text" 
             className="champion-search" 
             placeholder="Search" 
+            onClick={() => setMiddlePanel('search')}
             onChange={(e) => handleSearch(e.target.value)}>
           </input>
           <button className="btn" onClick={() => setMiddlePanel('addMatchup')}>Add Matchup</button>
