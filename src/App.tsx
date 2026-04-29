@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SearchView from './SearchView'
 import AddMatchupView from './AddMatchupView';
 import './App.css'
@@ -6,11 +6,42 @@ import './App.css'
 function App() {
   const [middlePanel, setMiddlePanel] = useState<'search' | 'addMatchup'>('search');
   const [searchedChampion, setSearchedChampion] = useState('');
+  const [latestVersion, setLatestVersion] = useState('');
+  const [championNames, setChampionNames] = useState<any>(null);
 
-  const handleSearch = (value: string) => {
-    if (value) {
-      const capitalized = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-      setSearchedChampion(capitalized);
+  useEffect(() => {
+    async function fetchData() {
+      const versionResponse = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
+      const versions = await versionResponse.json();
+      const version = versions[0];
+      setLatestVersion(version);
+
+      const champResponse = await fetch(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion.json`)
+      const champData = await champResponse.json();
+      setChampionNames(champData.data);
+    }
+
+    fetchData();
+  }, []);
+
+  const isValidChampion = (userInput: string) => {
+    if (!championNames) return false;
+    return userInput in championNames;
+  }
+
+  const handleSearch = (userInput: string) => {
+    console.log('user typed: ', userInput);
+    let capitalizedChampionName = userInput.charAt(0).toUpperCase() + userInput.slice(1).toLowerCase();
+    console.log('capitalized: ', capitalizedChampionName);
+    if (capitalizedChampionName === 'Wukong') {
+    capitalizedChampionName = 'MonkeyKing';
+    }
+
+    console.log('champion names loaded? ', championNames);
+    console.log('is valid? ', isValidChampion(capitalizedChampionName))
+
+    if (isValidChampion(capitalizedChampionName)) {
+      setSearchedChampion(capitalizedChampionName);
     } else {
       setSearchedChampion('');
     }
@@ -50,7 +81,7 @@ function App() {
 
       {/* Middle Panel */}
       <section className="middle-panel">
-        {middlePanel == 'search' && <SearchView champion={searchedChampion} />}
+        {middlePanel == 'search' && <SearchView champion={searchedChampion} version={latestVersion} />}
         {middlePanel == 'addMatchup' && <AddMatchupView />}
       </section>
 

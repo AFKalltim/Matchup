@@ -1,7 +1,7 @@
-function SearchView({ champion }: { champion: string }) {
-    const url = `https://ddragon.leagueoflegends.com/cdn/16.8.1/img/champion/${champion}.png`
+function SearchView({ champion, version }: { champion: string, version: string }) {
+    const url = `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion}.png`
 
-    const validChampion = champion && champion.length > 2; // add actual hampion validation later
+    const validChampion = champion && champion.length > 2; // add actual champion validation later
 
     return (
         <>
