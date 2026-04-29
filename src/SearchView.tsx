@@ -1,7 +1,9 @@
 function SearchView({ champion, version }: { champion: string, version: string }) {
-    const url = `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion}.png`
-
-    const validChampion = champion && champion.length > 2; // add actual champion validation later
+    let url = `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${champion}.png`
+    
+    if (champion == "Wukong") {
+        url = `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/MonkeyKing.png`;
+    }
 
     return (
         <>
@@ -17,7 +19,7 @@ function SearchView({ champion, version }: { champion: string, version: string }
                     onError={(e) => {e.currentTarget.src = '/-1.png'; }}
                     />
                 </div>
-                {validChampion ? (<h2>{champion}</h2>) : (<h2>Champion Name</h2>)}
+                {champion ? (<h2>{champion}</h2>) : (<h2>Champion Name</h2>)}
             </div>
         </>
     )

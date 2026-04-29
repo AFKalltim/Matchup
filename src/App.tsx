@@ -18,7 +18,8 @@ function App() {
 
       const champResponse = await fetch(`https://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion.json`)
       const champData = await champResponse.json();
-      setChampionNames(champData.data);
+      const champNames = Object.values(champData.data).map((champ: any) => champ.name);
+      setChampionNames(champNames);
     }
 
     fetchData();
@@ -26,17 +27,15 @@ function App() {
 
   const isValidChampion = (userInput: string) => {
     if (!championNames) return false;
-    return userInput in championNames;
+    return championNames.includes(userInput);
   }
 
   const handleSearch = (userInput: string) => {
     console.log('user typed: ', userInput);
+    
     let capitalizedChampionName = userInput.charAt(0).toUpperCase() + userInput.slice(1).toLowerCase();
+    
     console.log('capitalized: ', capitalizedChampionName);
-    if (capitalizedChampionName === 'Wukong') {
-    capitalizedChampionName = 'MonkeyKing';
-    }
-
     console.log('champion names loaded? ', championNames);
     console.log('is valid? ', isValidChampion(capitalizedChampionName))
 
