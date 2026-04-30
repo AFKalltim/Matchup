@@ -26,18 +26,11 @@ function App() {
   }, []);
 
   const isValidChampion = (userInput: string) => {
-    if (!championNames) return false;
-    return championNames.includes(userInput);
+    return championNames ? championNames.includes(userInput) : false;
   }
 
   const handleSearch = (userInput: string) => {
-    console.log('user typed: ', userInput);
-    
-    let capitalizedChampionName = userInput.charAt(0).toUpperCase() + userInput.slice(1).toLowerCase();
-    
-    console.log('capitalized: ', capitalizedChampionName);
-    console.log('champion names loaded? ', championNames);
-    console.log('is valid? ', isValidChampion(capitalizedChampionName))
+    const capitalizedChampionName = userInput.charAt(0).toUpperCase() + userInput.slice(1).toLowerCase();
 
     if (isValidChampion(capitalizedChampionName)) {
       setSearchedChampion(capitalizedChampionName);
@@ -60,8 +53,8 @@ function App() {
             className="champion-search" 
             placeholder="Search" 
             onClick={() => setMiddlePanel('search')}
-            onChange={(e) => handleSearch(e.target.value)}>
-          </input>
+            onChange={(e) => handleSearch(e.target.value)}
+          />
           <button className="btn" onClick={() => setMiddlePanel('addMatchup')}>Add Matchup</button>
           <button className="btn">Edit Matchup</button>
           <button className="btn">Delete Matchup</button>
@@ -81,7 +74,7 @@ function App() {
       {/* Middle Panel */}
       <section className="middle-panel">
         {middlePanel == 'search' && <SearchView champion={searchedChampion} version={latestVersion} />}
-        {middlePanel == 'addMatchup' && <AddMatchupView />}
+        {middlePanel == 'addMatchup' && <AddMatchupView championNames={championNames} version={latestVersion} />}
       </section>
 
       {/* Right Panel */}
