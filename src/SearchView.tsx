@@ -11,8 +11,8 @@ function SearchView({ champion, version }: { champion: string, version: string }
                 <h1 className="header-text">Found Champions</h1>
             </header>
             
-            <div className="searched-champion-info">
-                <div className="img-container">
+            <div className="search-info">
+                <div className="img-border">
                     <img 
                     src={url} 
                     alt="champion icon" 
@@ -20,6 +20,10 @@ function SearchView({ champion, version }: { champion: string, version: string }
                     />
                 </div>
                 {champion ? (<h2>{champion}</h2>) : (<h2>Champion Name</h2>)}
+            </div>
+
+            <div className="search-results-container">
+
             </div>
         </>
     )

@@ -4,31 +4,43 @@
   width: 100%;
   height: 100%;
 }
-.left-panel {
+.left-panel, .middle-panel, .right-panel {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-between;
   width: 30%;
   border: 10px ridge steelblue;
   background-color: gainsboro;
 }
+.right-panel {
+  width: 40%;
+}
 .panel-header, .panel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
   padding: 50px;
 }
 .header-text {
   text-align: center;
 }
-.interaction-container {
+.left-panel-interaction-container {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  justify-content: center;
+  width: 80%;
   gap: 50px;
+  border-top: 2px solid grey;
+  border-bottom: 2px solid grey;
 }
 .champion-search, .btn {
   width: 50%;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 20px;
 }
 .btn {
@@ -44,53 +56,43 @@
   font-size: x-small;
   text-align: center;
 }
-.middle-panel {
-  display: flex;
-  flex-direction: column;
-  width: 30%;
-  border: 10px ridge steelblue;
-  background-color: gainsboro;
-}
-.right-panel {
-  display: flex;
-  flex-direction: column;
-  width: 40%;
-  border: 10px ridge steelblue;
-  background-color: gainsboro;
-}
-.img-container {
+.img-border {
   width: 128px;
   height: 128px;
   border: 4px ridge darkgray;
 }
-.img-container img {
+.img-border img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 /* SearchView Styles */
-.searched-champion-info {
+.search-info {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: 20px;
 }
-
+.search-results-container {
+  flex: 1;
+  overflow-y: auto;
+}
 /* AddMatchupView Styles */
 .add-matchup-interaction-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  align-items:center;
+  width: 100%;
+  gap: 40px;
 }
 .select-matchup-container {
   display: grid;
   grid-template-columns: auto auto auto;
   gap: 10px;
 }
-.img-container-text {
+.img-border-text {
   font-size: 20px;
   text-align: center;
 }
@@ -100,4 +102,60 @@
 .matchup-champion-search {
   height: 30px;
   width: 128px;
+}
+.matchup-severity-btn-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+.severity-btn {
+  width: 50%;
+  padding: 20px;
+  border-radius: 30px;
+  border-width: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.severity-btn.hard {
+  background-color: lavenderblush;
+  border-color: brown;
+}
+.severity-btn.hard.selected {
+  border-color: red;
+  box-shadow: 0 0 3px 1px red;
+}
+.severity-btn.medium {
+  background-color: beige;
+  border-color: goldenrod;
+}
+.severity-btn.medium.selected {
+  border-color: gold;
+  box-shadow: 0 0 3px 1px gold;
+}
+.severity-btn.soft {
+  background-color: honeydew;
+  border-color: darkgreen;
+}
+.severity-btn.soft.selected {
+  border-color: lime;
+  box-shadow: 0 0 3px 1px lime;
+}
+.save-btn-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.save-btn {
+  width: 30%;
+  padding: 15px;
+  border-radius: 30px;
+  border-width: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.error-msg {
+  text-align: center;
 }

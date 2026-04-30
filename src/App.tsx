@@ -47,7 +47,7 @@ function App() {
           <h1 className="header-text">Matchup</h1>
         </header>
         
-        <div className="interaction-container">
+        <div className="left-panel-interaction-container">
           <input 
             type="text" 
             className="champion-search" 
