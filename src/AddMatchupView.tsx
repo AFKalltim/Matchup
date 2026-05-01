@@ -93,16 +93,12 @@ function AddMatchupView({ championNames, version }: { championNames: string[], v
                 </div>
 
                 <div className="save-btn-container">
-                    <button 
-                    className="save-btn">
-                        Save
-                    </button>
+                    <button className="save-btn">Save</button>
+                    <p className="error-msg">Error Message</p>
                 </div>
             </div>
 
-            <div className="panel-footer">
-                <p className="error-msg">Error Message</p>
-            </div>
+            
         </>
     )
 }
