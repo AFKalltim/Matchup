@@ -97,8 +97,6 @@ function AddMatchupView({ championNames, version }: { championNames: string[], v
                     <p className="error-msg">Error Message</p>
                 </div>
             </div>
-
-            
         </>
     )
 }

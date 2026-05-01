@@ -8,6 +8,7 @@ function App() {
   const [searchedChampion, setSearchedChampion] = useState('');
   const [latestVersion, setLatestVersion] = useState('');
   const [championNames, setChampionNames] = useState<any>(null);
+  const [matchupNotes, setMatchupNotes] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -80,8 +81,19 @@ function App() {
       {/* Right Panel */}
       <section className="right-panel">
         <header className="panel-header">
-          <h1 className="header-text">Notes</h1>
+          <label htmlFor="matchup-notes" className="notes-label">Notes</label>
         </header>
+
+        <div className="notes-container">  
+          <textarea
+          id="matchup-notes"
+          className="matchup-notes"
+          value={matchupNotes}
+          disabled={middlePanel != "addMatchup"}
+          onChange={(e) => setMatchupNotes(e.target.value)}
+          spellCheck="false"
+        />
+        </div>
       </section>
     </main>
   )

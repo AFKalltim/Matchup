@@ -21,6 +21,7 @@
   align-items: center;
   justify-content: center;
   height: 150px;
+  width: 100%;
   padding: 50px;
 }
 .header-text {
@@ -66,6 +67,23 @@
   height: 100%;
   object-fit: cover;
 }
+.notes-label {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.notes-container {
+  flex: 1;
+  display: flex;
+  width: 100%;
+}
+.matchup-notes {
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 10px;
+  font-size: 14px;
+  background-color: whitesmoke;
+}
 
 /* SearchView Styles */
 .search-info {
@@ -79,6 +97,7 @@
   flex: 1;
   overflow-y: auto;
 }
+
 /* AddMatchupView Styles */
 .add-matchup-interaction-container {
   flex: 1;
