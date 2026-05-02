@@ -1,9 +1,39 @@
 import { useState } from 'react';
 
-function AddMatchupView({ championNames, version }: { championNames: string[], version: string }) {
-    const [enemyChamp, setEnemyChamp] = useState('');
-    const [counterPick, setCounterPick] = useState('');
-    const [matchupSeverity, setMatchupSeverity] = useState('');
+function AddMatchupView({ championNames, version, matchupNotes, matchups, selectedMatchup, isEditingMatchup, saveFunction}: 
+                        { championNames: string[], version: string, matchupNotes: string, matchups: any, selectedMatchup: any, isEditingMatchup: boolean,
+                          saveFunction: (enemyChamp: string, counterPick: string, severity: string, notes: string) => void }) {
+    const [enemyChamp, setEnemyChamp] = useState(selectedMatchup?.enemyChamp || '');
+    const [counterPick, setCounterPick] = useState(selectedMatchup?.counterPick || '');
+    const [matchupSeverity, setMatchupSeverity] = useState(selectedMatchup?.severity || '');
+    const [errorMsg, setErrorMsg] = useState('');
+
+    const handleSave = () => {
+        if (!enemyChamp || !counterPick) {
+            setErrorMsg('Error: Select two champions.');
+            return;
+        }
+        else if (enemyChamp == counterPick) {
+            setErrorMsg('Error: The same champion was selected twice.')
+            return;
+        }
+        else if (!isEditingMatchup) {
+            const exists = matchups[enemyChamp]?.counters.some(
+                (c: any) => c.champion === counterPick
+            );
+            if (exists) {
+                setErrorMsg('Error: Matchup already exists. Use edit matchup button to change severity or notes.');
+                return;
+            }
+        }
+        else if (!matchupSeverity) {
+            setErrorMsg('Error: Select a matchup severity.');
+            return;
+        }
+
+        setErrorMsg('');
+        saveFunction(enemyChamp, counterPick, matchupSeverity, matchupNotes);
+    };
 
     const isValidChampion = (userInput: string) => {
         return championNames ? championNames.includes(userInput) : false;
@@ -93,8 +123,11 @@ function AddMatchupView({ championNames, version }: { championNames: string[], v
                 </div>
 
                 <div className="save-btn-container">
-                    <button className="save-btn">Save</button>
-                    <p className="error-msg">Error Message</p>
+                    <button 
+                    className="save-btn"
+                    onClick={handleSave}
+                    >Save</button>
+                    <p className="error-msg">{errorMsg}</p>
                 </div>
             </div>
         </>

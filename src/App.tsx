@@ -9,6 +9,16 @@ function App() {
   const [latestVersion, setLatestVersion] = useState('');
   const [championNames, setChampionNames] = useState<any>(null);
   const [matchupNotes, setMatchupNotes] = useState('');
+  const [matchups, setMatchups] = useState<any>({});
+  const [selectedMatchup, setSelectedMatchup] = useState<any>(null);
+  const [isEditingMatchup, setIsEditingMatchup] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('matchups');
+    if (saved) {
+      setMatchups(JSON.parse(saved));
+    }
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -26,6 +36,46 @@ function App() {
     fetchData();
   }, []);
 
+  const selectMatchup = (enemyChamp: string, counter: any) => {
+    setSelectedMatchup({
+      enemyChamp,
+      counterPick: counter.champion,
+      severity: counter.severity,
+      notes: counter.notes
+    });
+    setMatchupNotes(counter.notes);
+  }
+
+  const saveMatchup = (enemyChamp: string, counterPick: string, severity: string, notes: string) => {
+    const newMatchups = { ...matchups };
+
+    if (!newMatchups[enemyChamp]) {
+      newMatchups[enemyChamp] = { counters: [] };
+    }
+
+    const existingMatchupIndex = newMatchups[enemyChamp].counters.findIndex(
+      (c: any) => c.champion === counterPick
+    );
+
+    if (existingMatchupIndex >= 0) {
+      newMatchups[enemyChamp].counters[existingMatchupIndex] = {
+        champion: counterPick,
+        severity: severity,
+        notes: notes
+      };
+    } else {
+      newMatchups[enemyChamp].counters.push({
+        champion: counterPick,
+        severity: severity,
+        notes: notes
+      });
+    }
+
+    setMatchups(newMatchups);
+    localStorage.setItem('matchups', JSON.stringify(newMatchups));
+    console.log("succesfully saved matchup");
+  }
+
   const isValidChampion = (userInput: string) => {
     return championNames ? championNames.includes(userInput) : false;
   }
@@ -40,6 +90,26 @@ function App() {
     }
   };
 
+  const handleDelete = () => {
+    const newMatchups = { ...matchups };
+
+    if (newMatchups[selectedMatchup.enemyChamp]?.counters) {
+      newMatchups[selectedMatchup.enemyChamp].counters = newMatchups[selectedMatchup.enemyChamp].counters.filter(
+        (c: any) => c.champion !== selectedMatchup.counterPick
+      );
+      if (newMatchups[selectedMatchup.enemyChamp].length === 0) {
+        delete newMatchups[selectedMatchup.enemyChamp];
+      }
+    }
+
+    setMatchups(newMatchups);
+    localStorage.setItem('matchups', JSON.stringify(newMatchups));
+
+    setSelectedMatchup(null);
+    setMatchupNotes('');
+    setIsEditingMatchup(false);
+  }
+
   return (
     <main className="container">
       {/* Left Panel */}
@@ -52,13 +122,13 @@ function App() {
           <input 
             type="text" 
             className="champion-search" 
-            placeholder="Search" 
-            onClick={() => setMiddlePanel('search')}
+            placeholder="Search Enemy Pick" 
+            onClick={() => {setMiddlePanel('search'); setIsEditingMatchup(false); setMatchupNotes('');}}
             onChange={(e) => handleSearch(e.target.value)}
           />
-          <button className="btn" onClick={() => setMiddlePanel('addMatchup')}>Add Matchup</button>
-          <button className="btn">Edit Matchup</button>
-          <button className="btn">Delete Matchup</button>
+          <button className="btn" onClick={() => {setIsEditingMatchup(false); setMiddlePanel('addMatchup'); setMatchupNotes(''); setSelectedMatchup(null);}}>Add Matchup</button>
+          <button className="btn" onClick={() => {setIsEditingMatchup(true); setMiddlePanel('addMatchup');}} disabled={!selectedMatchup}>Edit Matchup</button>
+          <button className="btn" onClick={handleDelete} disabled={!selectedMatchup}>Delete Matchup</button>
         </div>
 
         <footer className="panel-footer">
@@ -74,8 +144,9 @@ function App() {
 
       {/* Middle Panel */}
       <section className="middle-panel">
-        {middlePanel == 'search' && <SearchView champion={searchedChampion} version={latestVersion} />}
-        {middlePanel == 'addMatchup' && <AddMatchupView championNames={championNames} version={latestVersion} />}
+        {middlePanel == 'search' && <SearchView searchedChampion={searchedChampion} version={latestVersion} matchups={matchups} selectMatchup={selectMatchup} />}
+        {middlePanel == 'addMatchup' && <AddMatchupView championNames={championNames} version={latestVersion}
+        matchupNotes={matchupNotes} saveFunction={saveMatchup} matchups={matchups} selectedMatchup={selectedMatchup} isEditingMatchup={isEditingMatchup} />}
       </section>
 
       {/* Right Panel */}

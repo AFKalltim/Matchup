@@ -44,14 +44,14 @@
   border-radius: 20px;
   font-size: 20px;
 }
+.champion-search::placeholder {
+  text-align: center;
+}
 .btn {
   cursor: pointer;
 }
 .btn:active {
   background-color: darkgrey;
-}
-::placeholder {
-  text-align: center;
 }
 .footer-text {
   font-size: x-small;
@@ -80,13 +80,22 @@
   border: none;
   outline: none;
   resize: none;
+  width: 100%;
   padding: 10px;
   font-size: 14px;
   background-color: whitesmoke;
 }
 
 /* SearchView Styles */
-.search-info {
+.search-info-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+  overflow-y: auto;
+}
+.searched-champion-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -94,8 +103,31 @@
   gap: 20px;
 }
 .search-results-container {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+.counter-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  border: 2px solid;
+}
+.counter-card.hard {
+  border-color: red;
+  background-color: lavenderblush;
+}
+.counter-card.medium {
+  border-color: gold;
+  background-color: beige;
+}
+.counter-card.soft {
+  border-color: lime;
+  background-color: honeydew;
 }
 
 /* AddMatchupView Styles */
@@ -178,5 +210,7 @@
   cursor: pointer;
 }
 .error-msg {
+  color: darkred;
   text-align: center;
+  margin: 0px 30px;
 }
