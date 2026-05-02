@@ -1,13 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function AddMatchupView({ championNames, version, matchupNotes, matchups, selectedMatchup, isEditingMatchup, saveFunction}: 
                         { championNames: string[], version: string, matchupNotes: string, matchups: any, selectedMatchup: any, isEditingMatchup: boolean,
                           saveFunction: (enemyChamp: string, counterPick: string, severity: string, notes: string) => void }) {
-    const [enemyChamp, setEnemyChamp] = useState(selectedMatchup?.enemyChamp || '');
-    const [counterPick, setCounterPick] = useState(selectedMatchup?.counterPick || '');
-    const [matchupSeverity, setMatchupSeverity] = useState(selectedMatchup?.severity || '');
+    const [inputEnemyChamp, setInputEnemyChamp] = useState('');
+    const [inputCounterPick, setInputCounterPick] = useState('');
+    const [enemyChamp, setEnemyChamp] = useState('');
+    const [counterPick, setCounterPick] = useState('');
+    const [matchupSeverity, setMatchupSeverity] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
 
+    useEffect(() => {
+        if (isEditingMatchup && selectedMatchup) {
+            setInputEnemyChamp(selectedMatchup.enemyChamp || '');
+            setInputCounterPick(selectedMatchup.counterPick || '');
+            setEnemyChamp(selectedMatchup.enemyChamp || '');
+            setCounterPick(selectedMatchup.counterPick || '');
+            setMatchupSeverity(selectedMatchup.severity || '');
+        } else {
+            setInputEnemyChamp('');
+            setInputCounterPick('');
+            setEnemyChamp('');
+            setCounterPick('');
+            setMatchupSeverity('');
+        }
+        setErrorMsg('');
+    }, [isEditingMatchup, selectedMatchup]);                        
+    
     const handleSave = () => {
         if (!enemyChamp || !counterPick) {
             setErrorMsg('Error: Select two champions.');
@@ -45,12 +64,18 @@ function AddMatchupView({ championNames, version, matchupNotes, matchups, select
         if (isValidChampion(capitalizedChampionName)) {
             setEnemyChamp(capitalizedChampionName);
         }
+        else {
+            setEnemyChamp('');
+        }
     };
     const handleSearchCounterPick = (userInput: string) => {
         const capitalizedChampionName = userInput.charAt(0).toUpperCase() + userInput.slice(1).toLowerCase();
 
         if (isValidChampion(capitalizedChampionName)) {
             setCounterPick(capitalizedChampionName);
+        }
+        else {
+            setCounterPick('');
         }
     };
 
@@ -92,15 +117,23 @@ function AddMatchupView({ championNames, version, matchupNotes, matchups, select
                     <input 
                         type="text"
                         className="matchup-champion-search"
+                        value={inputEnemyChamp}
                         placeholder="Search"
-                        onChange={(e) => handleSearchEnemyChamp(e.target.value)}
+                        disabled={isEditingMatchup}
+                        onChange={(e) => {
+                            handleSearchEnemyChamp(e.target.value);
+                            setInputEnemyChamp(e.target.value);}}
                     />
                     <div></div>
                     <input 
                         type="text"
                         className="matchup-champion-search"
+                        value={inputCounterPick}
                         placeholder="Search"
-                        onChange={(e) => handleSearchCounterPick(e.target.value)}
+                        disabled={isEditingMatchup}
+                        onChange={(e) => {
+                            handleSearchCounterPick(e.target.value);
+                            setInputCounterPick(e.target.value);}}
                     />
                 </div> 
 
